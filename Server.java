@@ -17,7 +17,7 @@ class Main {
     private static Boolean work = true;
 
     public static void main(final String[] args) throws SocketException, UnknownHostException, InterruptedException {
-        socket = new DatagramSocket(4444);
+        socket = new DatagramSocket(4445);
         address = InetAddress.getByName("localhost");
 
         final Thread t1 = new Thread() {
