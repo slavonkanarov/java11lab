@@ -8,17 +8,45 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-class Main {
+class Server {
 
     private static DatagramSocket socket;
     private static InetAddress address;
-    private static int port = 4444;
-    private static String name = "client";
+    private static int port = 4445;
+    private static String name;
     private static Boolean work = true;
+    private static Scanner sc;
 
     public static void main(final String[] args) throws SocketException, UnknownHostException, InterruptedException {
-        socket = new DatagramSocket(4445);
-        address = InetAddress.getByName("localhost");
+        sc = new Scanner(System.in);
+        if(args.length > 0){
+            if(args[0] == "client"){
+                name = "client";
+                socket = new DatagramSocket();
+                address = InetAddress.getByName(args[1]);
+                port = Integer.parseInt(args[2]);
+            }else{
+                name = "server";
+                socket = new DatagramSocket(Integer.parseInt(args[1]));
+                address = InetAddress.getByName("localhost");
+            }
+        }else{
+            System.out.print("client or server? ");
+            if(sc.nextLine().equals("client")){
+                name = "client";
+                socket = new DatagramSocket();
+                System.out.print("adress: ");
+                address = InetAddress.getByName(sc.nextLine());
+                System.out.print("port: ");
+                port = sc.nextInt();
+            }else{
+                name = "server";
+                System.out.print("port: ");
+                socket = new DatagramSocket(sc.nextInt());
+                address = InetAddress.getByName("localhost");
+            }
+        }
+
 
         final Thread t1 = new Thread() {
             private byte[] buf = new byte[256];
@@ -43,9 +71,11 @@ class Main {
             private byte[] buf = new byte[256];
 
             public void run() {
-                Scanner sc = new Scanner(System.in);
+                sc = new Scanner(System.in);
                 while(work){
+                    if(!sc.hasNext()) continue;
                     String str = sc.nextLine();
+                    if( str.length() == 0) continue;
                     if (str.codePointAt(0) == '@') {
                         if (str.indexOf("name") == 1) {
                             name = str.substring(6);
@@ -63,9 +93,10 @@ class Main {
                         }
                     }
                 }
-                sc.close();
             }
         };
+        
+        System.out.println("start");
         t1.start();
         t2.start();
         
@@ -73,5 +104,6 @@ class Main {
         t1.stop();
         
         socket.close();
+        sc.close();
    } 
 }
