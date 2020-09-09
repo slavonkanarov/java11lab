@@ -13,7 +13,7 @@ class Main {
     private static DatagramSocket socket;
     private static InetAddress address;
     private static int port = 4444;
-    private static String name = "server";
+    private static String name = "client";
     private static Boolean work = true;
 
     public static void main(final String[] args) throws SocketException, UnknownHostException, InterruptedException {
