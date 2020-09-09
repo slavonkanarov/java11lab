@@ -12,7 +12,7 @@ class Main {
 
     private static DatagramSocket socket;
     private static InetAddress address;
-    private static int port = 4444;
+    private static int port = 4445;
     private static String name = "server";
     private static Boolean work = true;
 
