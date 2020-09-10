@@ -101,7 +101,7 @@ class Server {
         t2.start();
         
         t2.join();
-        t1.stop();
+        t1.interrupt();
         
         socket.close();
         sc.close();
